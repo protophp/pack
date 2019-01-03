@@ -4,6 +4,7 @@ namespace Proto\Pack\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Proto\Pack\Pack;
+use Proto\Pack\PackException;
 use Proto\Pack\PackInterface;
 
 class PackTest extends TestCase
@@ -28,16 +29,55 @@ class PackTest extends TestCase
         $this->assertTrue($pack->isHeader());
     }
 
-    public function testBoolNullConvert()
+    /**
+     * @throws \Exception
+     */
+    public function testHeaderLimited()
     {
-        // NULL
-        $this->PackTest(null, null);
+        try {
+            $this->PackTest(true, null);
+        } catch (PackException $e) {
+            $this->assertEquals($e->getCode(), PackException::ERR_HEADER_UNSUPPORTED_TYPES);
+        }
 
-        // BOOL
-        $this->PackTest(true, false);
+        try {
+            $this->PackTest(false, null);
+        } catch (PackException $e) {
+            $this->assertEquals($e->getCode(), PackException::ERR_HEADER_UNSUPPORTED_TYPES);
+        }
+
+        try {
+            $this->PackTest(unpack('f', random_bytes(4))[1], null);
+        } catch (PackException $e) {
+            $this->assertEquals($e->getCode(), PackException::ERR_HEADER_UNSUPPORTED_TYPES);
+        }
+
+        try {
+            $this->PackTest(unpack('d', random_bytes(8))[1], null);
+        } catch (PackException $e) {
+            $this->assertEquals($e->getCode(), PackException::ERR_HEADER_UNSUPPORTED_TYPES);
+        }
+
+        try {
+            $this->PackTest(random_bytes(0xFFFF + 1), null);
+        } catch (PackException $e) {
+            $this->assertEquals($e->getCode(), PackException::ERR_HEADER_TOO_LARGE);
+        }
+
+        $this->assertEquals(5, $this->getCount());
     }
 
-    public function testIntConvert()
+    public function testNullPack()
+    {
+        $this->PackTest(null, null);
+    }
+
+    public function testBoolPack()
+    {
+        $this->PackTest(null, false);
+    }
+
+    public function testIntPack()
     {
         // int8
         $this->PackTest(240, -100);
@@ -58,14 +98,14 @@ class PackTest extends TestCase
         $this->PackTest(8.5185512186893E+122, -1.6441203792124E-296);
     }
 
-    public function testArrayObjectConvert()
+    public function testArrayObjectPack()
     {
         $object = new \stdClass();
         $object->VAR = ['Var', "Obj"];
         $this->PackTest([10 => 'test', 'key' => [1 => 'foo', 'bar' => 500]], $object);
     }
 
-    public function testStringConvert()
+    public function testStringPack()
     {
         $this->PackTest('Foo', 'Bar');
     }
@@ -73,20 +113,20 @@ class PackTest extends TestCase
     private function PackTest($header, $data)
     {
         $pack = (new Pack())->setHeader($header)->setData($data);
-        $encoded = (string)$pack;
+        $encoded = $pack->toString();
 
         $this->assertIsString($encoded);
         $cPack = new Pack();
 
         // In one
-        $cPack->chunk($encoded);
+        $cPack->mergeFrom($encoded);
         $this->assertSame($header, $cPack->getHeader());
         $this->assertSame($data, $cPack->getData());
 
         // Split
         $sPack = new Pack();
         foreach (str_split($encoded) as $chunk)
-            $sPack->chunk($chunk);
+            $sPack->mergeFrom($chunk);
 
         $this->assertSame($header, $cPack->getHeader());
         $this->assertSame($data, $cPack->getData());
