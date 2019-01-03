@@ -87,7 +87,7 @@ class MakeTypes
                 $i++;
             }
         }
-        file_put_contents($path . '/ID2T-Limited', msgpack_pack($ID2T));
+        file_put_contents($path . '/ID2T-Limited', bin2hex(msgpack_pack($ID2T)));
 
         // Header Full
         $ID2T = [];
@@ -98,6 +98,6 @@ class MakeTypes
                 $i++;
             }
         }
-        file_put_contents($path . '/ID2T', msgpack_pack($ID2T));
+        file_put_contents($path . '/ID2T', bin2hex(msgpack_pack($ID2T)));
     }
 }
