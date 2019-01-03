@@ -29,9 +29,6 @@ class PackTest extends TestCase
         $this->assertTrue($pack->isHeader());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testHeaderLimited()
     {
         try {
@@ -50,18 +47,24 @@ class PackTest extends TestCase
             $this->PackTest(unpack('f', random_bytes(4))[1], null);
         } catch (PackException $e) {
             $this->assertEquals($e->getCode(), PackException::ERR_HEADER_UNSUPPORTED_TYPES);
+        } catch (\Exception $e) {
+            die($e->getMessage());
         }
 
         try {
             $this->PackTest(unpack('d', random_bytes(8))[1], null);
         } catch (PackException $e) {
             $this->assertEquals($e->getCode(), PackException::ERR_HEADER_UNSUPPORTED_TYPES);
+        } catch (\Exception $e) {
+            die($e->getMessage());
         }
 
         try {
             $this->PackTest(random_bytes(0xFFFF + 1), null);
         } catch (PackException $e) {
             $this->assertEquals($e->getCode(), PackException::ERR_HEADER_TOO_LARGE);
+        } catch (\Exception $e) {
+            die($e->getMessage());
         }
 
         $this->assertEquals(5, $this->getCount());
@@ -77,25 +80,36 @@ class PackTest extends TestCase
         $this->PackTest(null, false);
     }
 
-    public function testIntPack()
+    public function testInt8Pack()
     {
-        // int8
         $this->PackTest(240, -100);
+    }
 
-        // int16
+    public function testInt16Pack()
+    {
         $this->PackTest(-18321, 52221);
+    }
 
-        // int32
+    public function testInt32Pack()
+    {
         $this->PackTest(3275862454, -1865131667);
+    }
 
-        // int64
+    public function testInt64Pack()
+    {
         $this->PackTest(-3344407726397714395, 5346531524877826330);
+    }
 
-        // float
-        $this->PackTest(1.9705970746224E-28, -3.9965788001204E+29);
+    public function testFloatPack()
+    {
+        $this->PackTest(null, -3.9965788001203555E+29);
+        $this->PackTest(null, 1.9705970746224E-28);
+    }
 
-        // double
-        $this->PackTest(8.5185512186893E+122, -1.6441203792124E-296);
+    public function testDoublePack()
+    {
+        $this->PackTest(null, -1.6441203792124E-296);
+        $this->PackTest(null, 8.5185512186893E+122);
     }
 
     public function testArrayObjectPack()
@@ -120,15 +134,31 @@ class PackTest extends TestCase
 
         // In one
         $cPack->mergeFrom($encoded);
-        $this->assertSame($header, $cPack->getHeader());
-        $this->assertSame($data, $cPack->getData());
+
+        if (is_object($header))
+            $this->assertSame(serialize($header), serialize($cPack->getHeader()));
+        else
+            $this->assertSame($header, $cPack->getHeader());
+
+        if (is_object($data))
+            $this->assertSame(serialize($data), serialize($cPack->getData()));
+        else
+            $this->assertSame($data, $cPack->getData());
 
         // Split
         $sPack = new Pack();
         foreach (str_split($encoded) as $chunk)
             $sPack->mergeFrom($chunk);
 
-        $this->assertSame($header, $cPack->getHeader());
-        $this->assertSame($data, $cPack->getData());
+
+        if (is_object($header))
+            $this->assertSame(serialize($header), serialize($cPack->getHeader()));
+        else
+            $this->assertSame($header, $cPack->getHeader());
+
+        if (is_object($data))
+            $this->assertSame(serialize($data), serialize($cPack->getData()));
+        else
+            $this->assertSame($data, $cPack->getData());
     }
 }
