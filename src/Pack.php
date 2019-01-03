@@ -61,11 +61,11 @@ class Pack implements PackInterface
         return isset($this->header);
     }
 
-    public function mergeFrom(string $chunk)
+    public function mergeFrom(string $chunk): bool
     {
         if ($this->completed) {
             // TODO: Log warning error
-            return;
+            return false;
         }
 
         $this->buffer .= $chunk;
@@ -80,33 +80,34 @@ class Pack implements PackInterface
 
         // Parse T
         $this->parseT($return);
-        if ($return) return;
+        if ($return) return false;
 
         // Parse HL
         if (!isset($this->bHL)) {
             $this->parseL($this->bT[0], $this->bHL, $return);
-            if ($return) return;
+            if ($return) return false;
         }
 
         // Parse DL
         if (!isset($this->bDL)) {
             $this->parseL($this->bT[1], $this->bDL, $return);
-            if ($return) return;
+            if ($return) return false;
         }
 
         // Parse HData
         if (!isset($this->header)) {
             $this->parseData($this->bT[0], $this->bHL, $this->header, $return);
-            if ($return) return;
+            if ($return) return false;
         }
 
         // Parse DData
         if (!isset($this->data)) {
             $this->parseData($this->bT[1], $this->bDL, $this->data, $return);
-            if ($return) return;
+            if ($return) return false;
         }
 
         $this->completed();
+        return true;
     }
 
     private function parseT(&$return)
@@ -144,7 +145,7 @@ class Pack implements PackInterface
         if ($XT[0] === 0) {         // NULL
             $data = null;
 
-        }elseif($XT[0] === 1){      // BOOL
+        } elseif ($XT[0] === 1) {      // BOOL
             $data = $XT[1];
 
         } elseif ($XT[0] === 2) {   // INT & FLOAT & DOUBLE
@@ -221,7 +222,7 @@ class Pack implements PackInterface
         if (is_null($data)) {
             $T = [0, $data];
 
-        }elseif(is_bool($data)){
+        } elseif (is_bool($data)) {
             $T = [1, $data];
 
         } elseif (is_string($data)) {
