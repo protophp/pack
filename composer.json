@@ -12,6 +12,7 @@
   "require": {
     "php": "^7.0",
     "ext-msgpack": "^2.0",
+    "opt/opt": "^1.0",
     "evenement/evenement": "^3.0"
   },
   "require-dev": {
