@@ -28,57 +28,67 @@ class PackTest extends TestCase
         $this->assertTrue($pack->isHeader());
     }
 
-    public function testBoolNullToString()
+    public function testBoolNullConvert()
     {
         // NULL
-        $pack = (new Pack())->setHeader(null)->setData(null);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(null, null);
 
         // BOOL
-        $pack = (new Pack())->setHeader(true)->setData(false);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(true, false);
     }
 
-    public function testIntToString()
+    public function testIntConvert()
     {
         // int8
-        $pack = (new Pack())->setHeader(240)->setData(-100);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(240, -100);
 
         // int16
-        $pack = (new Pack())->setHeader(-18321)->setData(52221);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(-18321, 52221);
 
         // int32
-        $pack = (new Pack())->setHeader(3275862454)->setData(-1865131667);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(3275862454, -1865131667);
 
-        // int 64
-        $pack = (new Pack())->setHeader(-3344407726397714395)->setData(5346531524877826330);
-        $this->assertIsString((string)$pack);
+        // int64
+        $this->PackTest(-3344407726397714395, 5346531524877826330);
 
         // float
-        $pack = (new Pack())->setHeader(1.9705970746224E-28)->setData(-3.9965788001204E+29);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(1.9705970746224E-28, -3.9965788001204E+29);
 
         // double
-        $pack = (new Pack())->setHeader(8.5185512186893E+122)->setData(-1.6441203792124E-296);
-        $this->assertIsString((string)$pack);
+        $this->PackTest(8.5185512186893E+122, -1.6441203792124E-296);
     }
 
-    public function testArrayObjectToString()
+    public function testArrayObjectConvert()
     {
         $object = new \stdClass();
         $object->VAR = ['Var', "Obj"];
-        $pack = (new Pack())->setHeader([10 => 'test', 'key' => [1 => 'foo', 'bar' => 500]])->setData($object);
-        $this->assertIsString((string)$pack);
+        $this->PackTest([10 => 'test', 'key' => [1 => 'foo', 'bar' => 500]], $object);
     }
 
-    public function testStringToString()
+    public function testStringConvert()
     {
-        $pack = (new Pack())->setHeader('Foo')->setData('Bar');
-        $this->assertIsString((string)$pack);
+        $this->PackTest('Foo', 'Bar');
     }
 
+    private function PackTest($header, $data)
+    {
+        $pack = (new Pack())->setHeader($header)->setData($data);
+        $encoded = (string)$pack;
 
+        $this->assertIsString($encoded);
+        $cPack = new Pack();
+
+        // In one
+        $cPack->chunk($encoded);
+        $this->assertSame($header, $cPack->getHeader());
+        $this->assertSame($data, $cPack->getData());
+
+        // Split
+        $sPack = new Pack();
+        foreach (str_split($encoded) as $chunk)
+            $sPack->chunk($chunk);
+
+        $this->assertSame($header, $cPack->getHeader());
+        $this->assertSame($data, $cPack->getData());
+    }
 }
