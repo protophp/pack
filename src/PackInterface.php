@@ -18,7 +18,7 @@ interface PackInterface
 
     public function isHeader(): bool;
 
-    public function mergeFrom(string $chunk);
+    public function mergeFrom(string $chunk): bool;
 
     public function toString(): string;
 }
