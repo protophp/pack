@@ -4,6 +4,8 @@ namespace Proto\Pack;
 
 interface PackInterface
 {
+    const OPT_HEADER_LIMITED = 1;
+
     public function setData($data): PackInterface;
 
     public function getData();
@@ -16,7 +18,7 @@ interface PackInterface
 
     public function isHeader(): bool;
 
-    public function chunk(string $chunk);
+    public function mergeFrom(string $chunk);
 
-    public function __toString(): string;
+    public function toString(): string;
 }
