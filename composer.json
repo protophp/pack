@@ -1,0 +1,30 @@
+{
+  "name": "protophp/pack",
+  "description": "An efficient binary packed data format for transmission through Long-lived connections.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Arash Ghamkhari",
+      "email": "dev@ghamkhari.com"
+    }
+  ],
+  "require": {
+    "php": "^7.0",
+    "ext-msgpack": "^2.0",
+    "evenement/evenement": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Proto\\Pack\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Proto\\Pack\\Tests\\": "tests"
+    }
+  }
+}
