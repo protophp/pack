@@ -51,9 +51,9 @@ class Pack implements PackInterface
         return $this;
     }
 
-    public function setArrayHeader($name, $value): PackInterface
+    public function setHeaderByKey($key, $value): PackInterface
     {
-        $this->header[$name] = $value;
+        $this->header[$key] = $value;
         return $this;
     }
 
@@ -62,9 +62,9 @@ class Pack implements PackInterface
         return $this->header;
     }
 
-    public function getArrayHeader($name)
+    public function getHeaderByKey($key)
     {
-        return isset($this->header[$name]) ? $this->header[$name] : null;
+        return isset($this->header[$key]) ? $this->header[$key] : null;
     }
 
     public function isHeader(): bool

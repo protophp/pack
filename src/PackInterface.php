@@ -14,11 +14,11 @@ interface PackInterface
 
     public function setHeader($header): PackInterface;
 
-    public function setArrayHeader($name, $value): PackInterface;
+    public function setHeaderByKey($key, $value): PackInterface;
 
     public function getHeader();
 
-    public function getArrayHeader($name);
+    public function getHeaderByKey($key);
 
     public function isHeader(): bool;
 

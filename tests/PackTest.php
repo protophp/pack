@@ -34,9 +34,9 @@ class PackTest extends TestCase
         $pack = new Pack();
 
         $this->assertFalse($pack->isHeader());
-        $this->assertTrue($pack->setArrayHeader('NAME', 'VALUE') instanceof PackInterface);
-        $this->assertNull($pack->getArrayHeader('NO-NAME'));
-        $this->assertSame('VALUE', $pack->getArrayHeader('NAME'));
+        $this->assertTrue($pack->setHeaderByKey('NAME', 'VALUE') instanceof PackInterface);
+        $this->assertNull($pack->getHeaderByKey('NO-NAME'));
+        $this->assertSame('VALUE', $pack->getHeaderByKey('NAME'));
         $this->assertTrue($pack->isHeader());
     }
 
