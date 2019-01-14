@@ -64,7 +64,7 @@ class Pack implements PackInterface
 
     public function getArrayHeader($name)
     {
-        return isset($name) ? $name : null;
+        return isset($this->header[$name]) ? $this->header[$name] : null;
     }
 
     public function isHeader(): bool
