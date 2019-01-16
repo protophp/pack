@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.2 (2019-01-16)
+
+* Feature: Add $default param to Pack::getHeaderByKey()
+
 ## v0.2.1 (2019-01-14)
 
 * Rename 'setArrayHeader' to 'setHeaderByKey'.
