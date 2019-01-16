@@ -62,9 +62,9 @@ class Pack implements PackInterface
         return $this->header;
     }
 
-    public function getHeaderByKey($key)
+    public function getHeaderByKey($key, $default = null)
     {
-        return isset($this->header[$key]) ? $this->header[$key] : null;
+        return isset($this->header[$key]) ? $this->header[$key] : $default;
     }
 
     public function isHeader(): bool

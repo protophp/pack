@@ -18,7 +18,7 @@ interface PackInterface
 
     public function getHeader();
 
-    public function getHeaderByKey($key);
+    public function getHeaderByKey($key, $default = null);
 
     public function isHeader(): bool;
 
