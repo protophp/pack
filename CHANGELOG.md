@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.3 (2019-01-17)
+
+* Feature: Added 'header' event in merging then the header of the pack is completed.
+
 ## v0.2.2 (2019-01-16)
 
 * Feature: Add $default param to Pack::getHeaderByKey()
