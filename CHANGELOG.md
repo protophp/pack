@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.0 (2019-01-24)
+
+* Feature: The merging progress is added.
+* Change: The 'header' event is renamed to 'unpack-header'.
+* Fix: The 'unpack-header' event wasn't triggered when the pack is one chunk.
+
 ## v0.2.3 (2019-01-17)
 
 * Feature: Added 'header' event in merging then the header of the pack is completed.
