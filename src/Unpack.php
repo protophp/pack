@@ -22,8 +22,10 @@ class Unpack extends EventEmitter implements UnpackInterface
             $this->header = false;
             $this->merging = null;
 
-        } elseif (!$this->header && $this->merging->isHeader()) {
-            $this->emit('header', [$this->merging]);
+        }
+
+        if (!$this->header && $this->merging->isHeader()) {
+            $this->emit('unpack-header', [$this->merging]);
             $this->header = true;
         }
     }
