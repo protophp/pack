@@ -19,6 +19,7 @@ class Pack implements PackInterface
     private $bHL;
     private $bDL;
 
+    private $mergingProgress = 0;
     private $completed = false;
 
     private static $ID2T;
@@ -72,6 +73,11 @@ class Pack implements PackInterface
         return isset($this->header);
     }
 
+    public function getMergingProgress(): int
+    {
+        return $this->mergingProgress;
+    }
+
     public function mergeFrom(string $chunk): bool
     {
         if ($this->completed) {
@@ -79,6 +85,7 @@ class Pack implements PackInterface
             return false;
         }
 
+        $this->mergingProgress += strlen($chunk);
         $this->buffer .= $chunk;
         $return = false;
 

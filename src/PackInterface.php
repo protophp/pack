@@ -22,6 +22,8 @@ interface PackInterface
 
     public function isHeader(): bool;
 
+    public function getMergingProgress(): int;
+
     public function mergeFrom(string $chunk): bool;
 
     public function toString(): string;
