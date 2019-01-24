@@ -158,8 +158,12 @@ class PackTest extends TestCase
 
         // Split
         $sPack = new Pack();
-        foreach (str_split($encoded) as $chunk)
+        $mergingProgress = 0;
+        foreach (str_split($encoded) as $chunk) {
             $sPack->mergeFrom($chunk);
+            $mergingProgress += strlen($chunk);
+            $this->assertEquals($mergingProgress, $sPack->getMergingProgress());
+        }
 
 
         if (is_object($header))
