@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.1 (2019-01-21)
+
+* Fix: Some bugs fixed.
+
 ## v0.3.0 (2019-01-24)
 
 * Feature: The merging progress is added.
