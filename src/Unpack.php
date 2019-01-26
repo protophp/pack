@@ -17,20 +17,22 @@ class Unpack extends EventEmitter implements UnpackInterface
         if (!isset($this->merging))
             $this->merging = new Pack();
 
-        $completed = $this->merging->mergeFrom($chunk);
+        $restBuffer = $this->merging->mergeFrom($chunk);
 
         if (!$this->header && $this->merging->isHeader()) {
             $this->emit('unpack-header', [$this->merging]);
             $this->header = true;
         }
 
-        if ($completed) {
-            $this->emit('unpack', [$this->merging]);
-            $this->header = false;
-            $this->merging = null;
+        if ($restBuffer === false)
+            return;
 
-        }
+        $this->emit('unpack', [$this->merging]);
+        $this->header = false;
+        $this->merging = null;
 
+        if ($restBuffer)
+            $this->feed($restBuffer);
     }
 
     public function merging(): PackInterface
