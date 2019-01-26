@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.2 (2019-01-26)
+
+* Fix: A bug fixed in merging
+
 ## v0.3.1 (2019-01-21)
 
 * Fix: Some bugs fixed.
