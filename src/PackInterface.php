@@ -24,7 +24,7 @@ interface PackInterface
 
     public function getMergingProgress(): int;
 
-    public function mergeFrom(string $chunk): bool;
+    public function mergeFrom(string $chunk);
 
     public function toString(): string;
 }

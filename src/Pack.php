@@ -78,7 +78,7 @@ class Pack implements PackInterface
         return $this->mergingProgress;
     }
 
-    public function mergeFrom(string $chunk): bool
+    public function mergeFrom(string $chunk)
     {
         if ($this->completed) {
             // TODO: Log warning error
@@ -124,8 +124,9 @@ class Pack implements PackInterface
             if ($return) return false;
         }
 
+        $restBuffer = $this->buffer;
         $this->completed();
-        return true;
+        return $restBuffer;
     }
 
     private function parseT(&$return)
