@@ -28,8 +28,7 @@ class Unpack extends EventEmitter implements UnpackInterface
             return;
 
         $this->emit('unpack', [$this->merging]);
-        $this->header = false;
-        $this->merging = null;
+        $this->clear();
 
         if ($restBuffer)
             $this->feed($restBuffer);
@@ -38,5 +37,11 @@ class Unpack extends EventEmitter implements UnpackInterface
     public function merging(): PackInterface
     {
         return $this->merging;
+    }
+
+    public function clear()
+    {
+        $this->header = false;
+        $this->merging = null;
     }
 }
