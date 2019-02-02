@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.3 (2019-02-02)
+
+* Fix: The ID2T static variable didn't set when the Unpack receives chunks from another process.
+* Changes: The header limited option is removed.
+
 ## v0.3.2 (2019-01-26)
 
 * Fix: A bug fixed in merging
