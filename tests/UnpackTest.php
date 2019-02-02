@@ -25,6 +25,8 @@ class UnpackTest extends TestCase
         });
 
         $unpack->feed((new Pack())->setHeader(['header-key', 'VALUE'])->setData('DATA')->toString());
+
+        $this->assertEquals(5, $this->getCount());
     }
 
     public function testChunkedUnpack()
@@ -55,5 +57,26 @@ class UnpackTest extends TestCase
             $unpack->feed($chunk);
 
         $this->assertEquals(20, $this->getCount());
+    }
+
+    public function testUnpackWithoutPack()
+    {
+        $chunk = base64_decode('sBIEkqpoZWFkZXIta2V5pVZBTFVFREFUQQ==');
+        $unpack = new Unpack();
+
+        $unpack->on('unpack-header', function (PackInterface $pack) {
+            $this->assertTrue($pack instanceof PackInterface);
+            $this->assertSame(['header-key', 'VALUE'], $pack->getHeader());
+        });
+
+        $unpack->on('unpack', function (PackInterface $pack) {
+            $this->assertTrue($pack instanceof PackInterface);
+            $this->assertSame(['header-key', 'VALUE'], $pack->getHeader());
+            $this->assertSame('DATA', $pack->getData());
+        });
+
+        $unpack->feed($chunk);
+
+        $this->assertEquals(5, $this->getCount());
     }
 }
