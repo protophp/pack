@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.4 (2019-02-02)
+
+* Improvement: The 'clear' method is added to Unpack.
+
 ## v0.3.3 (2019-02-02)
 
 * Fix: The ID2T static variable didn't set when the Unpack receives chunks from another process.
