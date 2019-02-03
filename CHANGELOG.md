@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.5 (2019-02-03)
+
+* Feature: The 'isMerged' method is added to the Pack class.
+
 ## v0.3.4 (2019-02-02)
 
 * Improvement: The 'clear' method is added to Unpack.
