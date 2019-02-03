@@ -129,6 +129,11 @@ class Pack implements PackInterface
         return $restBuffer;
     }
 
+    public function isMerged(): bool
+    {
+        return $this->completed;
+    }
+
     private function parseT(&$return)
     {
         if (!isset($this->bT)) {

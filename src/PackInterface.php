@@ -26,5 +26,7 @@ interface PackInterface
 
     public function mergeFrom(string $chunk);
 
+    public function isMerged(): bool;
+
     public function toString(): string;
 }
